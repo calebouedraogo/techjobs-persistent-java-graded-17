@@ -33,10 +33,21 @@ public class HomeController {
 
     @RequestMapping("/")
     public String index(Model model) {
-
+        model.addAttribute("jobs", jobRepository.findAll());
         model.addAttribute("title", "MyJobs");
 
         return "index";
+    }
+
+    @RequestMapping("/view/{id}")
+    public String viewJob(@PathVariable int id, Model model) {
+        Optional<Job> job = jobRepository.findById(id);
+        if (job.isPresent()) {
+            model.addAttribute("job", job.get());
+        } else {
+            model.addAttribute("title", "Job not found");
+        }
+        return "view";
     }
 
     @GetMapping("add")
